@@ -3,4 +3,6 @@
 **Dependencies**:
 
 Using open-source facial recognition
-'''git clone https://github.com/ageitgey/face_recognition.git'''
+```python
+git clone https://github.com/ageitgey/face_recognition.git
+```
