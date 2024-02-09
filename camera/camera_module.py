@@ -46,9 +46,20 @@ while True:
 
     # Draw a box and name for each recognized face in the original frame using the last known data
     for name, (top, right, bottom, left) in last_names_scaled:
+        # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-        cv2.putText(frame, name, (left + 6, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
 
+        # Determine the size of the text to be drawn
+        font = cv2.FONT_HERSHEY_DUPLEX
+        text_width, text_height = cv2.getTextSize(name, font, 1.0, 1)[0]
+
+        # Draw a filled rectangle to use as the label background
+        label_height = text_height + 10  # Adjust padding as needed
+        cv2.rectangle(frame, (left, top - label_height), (right, top), (0, 255, 0), cv2.FILLED)
+        
+        # Draw the text (name) on the label
+        cv2.putText(frame, name, (left + 6, top - 6), font, 1.0, (255, 255, 255), 1)
+    
     process_this_frame = not process_this_frame
 
     # Display the resulting frame
