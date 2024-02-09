@@ -2,9 +2,9 @@
 # and drawing a box around it. It will provide the input (video frames) that the face
 # recognition algorithm will use to recognize the user's face.
 
+import cv2
 import sys
 import os
-import cv2
 import face_recognition
 
 # Get the directory containing this file
@@ -19,6 +19,9 @@ from biometric_recognition.recognize_faces import recognize_faces
 # Initialize the camera (use 0 for the laptop's built-in camera)
 cap = cv2.VideoCapture(0)
 
+process_this_frame = True
+last_names_scaled = []  # Store the last known faces and locations
+
 while True:
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -28,13 +31,25 @@ while True:
         print("\nError: Could not read frame from camera. Please check your camera connection and try again.\n")
         break
 
-    # Recognize faces in the frame
-    names = recognize_faces(frame)
+    # Resize frame of video for faster face recognition processing
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
-    # Draw a box and name for each recognized face
-    for name, (top, right, bottom, left) in names:
+    if process_this_frame:
+        # Recognize faces in the resized frame
+        names = recognize_faces(small_frame)
+
+        # Scale back up face locations to the original frame size and store them
+        last_names_scaled = [
+            (name, (top * 4, right * 4, bottom * 4, left * 4))
+            for name, (top, right, bottom, left) in names
+        ]
+
+    # Draw a box and name for each recognized face in the original frame using the last known data
+    for name, (top, right, bottom, left) in last_names_scaled:
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-        cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+        cv2.putText(frame, name, (left + 6, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+
+    process_this_frame = not process_this_frame
 
     # Display the resulting frame
     cv2.imshow('Video', frame)
