@@ -53,8 +53,10 @@ def main():
                 break
         
         # Wait for all tasks to complete before exiting
-        for future, _ in as_completed(frame_futures):
-            pass
+        futures_only = [future for future, _ in frame_futures]
+        for future in as_completed(futures_only):
+            # You could process results here if needed
+            pass        
         
     cap.release()
     cv2.destroyAllWindows()
