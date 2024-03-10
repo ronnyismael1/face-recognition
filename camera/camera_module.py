@@ -8,6 +8,7 @@ import threading
 # Import your face recognition module
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'biometric_recognition'))
 from biometric_recognition.recognize_faces import recognize_faces
+from utilities.lock_module import unlock_door
 
 # Initialize camera
 cap = cv2.VideoCapture(0)
@@ -41,7 +42,12 @@ def main():
                     names = future.result()
                     last_names_scaled = [(name, (top * 4, right * 4, bottom * 4, left * 4)) for name, (top, right, bottom, left) in names]
                     frame_futures.remove((future, original_frame))
-            
+                # Check if a known face is detected and unlock the door
+                for name, _ in last_names_scaled:
+                    if name != "Unknown":
+                        unlock_door()
+                        break  # If at least one known face is detected, unlock the door
+                    
             # Draw boxes and names on the original frame
             for name, (top, right, bottom, left) in last_names_scaled:
                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
