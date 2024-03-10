@@ -49,7 +49,7 @@ def main():
             
             cv2.imshow('Video', frame)
             
-            if cv2.waitKey(1) & 0xFF == ord('q') or cv2.getWindowProperty('Video', cv2.WND_PROP_VISIBLE) < 1:
+            if cv2.waitKey(1) & 0xFF == ord('q') < 1:
                 break
         
         # Wait for all tasks to complete before exiting
