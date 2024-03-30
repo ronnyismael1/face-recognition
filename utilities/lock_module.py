@@ -21,7 +21,7 @@ def unlock_door():
     current_time = time.time()
 
     if current_time - last_unlock_time < 20:
-        print(f"Too many requests: {current_time - last_unlock_time} remaining.")
+        print(f"Too many requests: {int(20 - (current_time - last_unlock_time))}s remaining.")
         return
 
     print("Unlocking...")
