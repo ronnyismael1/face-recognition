@@ -26,12 +26,13 @@ def unlock_door():
 
     print("Unlocking...")
     GPIO.output(18, GPIO.LOW)  # LOW signal unlocks the door
-    sleep(10)  # Keep unlocked for 10 seconds
-    print("Unlocking complete.\n")
-    lock_door()  # Re-lock the door automatically after 5 seconds
-    last_unlock_time = time.time()
+    last_unlock_time = current_time
 
 def lock_door():
-    print("Locking...")
-    GPIO.output(18, GPIO.HIGH)  # HIGH signal locks the door
-    print("Locking complete.\n")
+    global last_unlock_time
+    current_time = time.time()
+
+    if current_time - last_unlock_time >= 10:  # 10 seconds have passed
+        print("Locking...")
+        GPIO.output(18, GPIO.HIGH)  # HIGH signal locks the door
+        print("Locking complete.\n")
