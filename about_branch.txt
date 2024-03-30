@@ -1,0 +1,3 @@
+Trying to improve camera speed.
+
+Multithread camera is slow so starting fresh
