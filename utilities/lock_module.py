@@ -8,14 +8,30 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.OUT)
 
+last_unlock_time = 0
+
 def initialize_lock():
-    GPIO.output(18, GPIO.LOW) # initially unlocked
-    sleep(5)
+    print("Initializing lock...")
+    GPIO.output(18, GPIO.HIGH) # Initiate unlock
+    sleep(1)
+    print("Initialization complete.\n")
 
 def unlock_door():
-    GPIO.output(18, GPIO.HIGH)  # Assume HIGH signal unlocks the door
+    global last_unlock_time
+    current_time = time.time()
+
+    if current_time - last_unlock_time < 20:
+        print("Too many requests")
+        return
+
+    print("Unlocking...")
+    GPIO.output(18, GPIO.LOW)  # LOW signal unlocks the door
     sleep(10)  # Keep unlocked for 10 seconds
+    print("Unlocking complete.\n")
     lock_door()  # Re-lock the door automatically after 5 seconds
+    last_unlock_time = time.time()
 
 def lock_door():
-    GPIO.output(18, GPIO.LOW)  # Assume LOW signal locks the door
+    print("Locking...")
+    GPIO.output(18, GPIO.HIGH)  # HIGH signal locks the door
+    print("Locking complete.\n")
