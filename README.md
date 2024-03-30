@@ -1,6 +1,6 @@
 # Security Video Smart Lock
 
-![board-prototype](images\board_prototype.png "Prototype of System")
+![board-prototype](images/board_prototype.png "Prototype of System")
 
 ## Overview
 
