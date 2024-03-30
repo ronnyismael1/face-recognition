@@ -1,4 +1,6 @@
 import camera.camera_module as camera # Capture video frames to pass to the face recognition algoritm
+from utilities.lock_module import initialize_lock
 
 if __name__ == "__main__":
-    camera.start()  # Add start function later but command still works
+    initialize_lock()
+    camera.start()
