@@ -1,4 +1,4 @@
-#GPIO controls for rasberry pi
+# GPIO controls for rasberry pi
 
 import RPi.GPIO as GPIO
 from time import sleep
@@ -21,7 +21,7 @@ def unlock_door():
     current_time = time.time()
 
     if current_time - last_unlock_time < 20:
-        print("Too many requests")
+        print(f"Too many requests: {current_time - last_unlock_time} remaining.")
         return
 
     print("Unlocking...")
