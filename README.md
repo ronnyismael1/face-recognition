@@ -58,6 +58,11 @@ This project also uses OpenCV for face tracking. You can install it with:
 pip install opencv-python
 ```
 
+For lock GPIO
+```sh
+sudo apt-get install python3-rpi.gpio
+```
+
 ## Usage
 
 After installing the necessary packages, you can start using the project.
