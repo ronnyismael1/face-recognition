@@ -1,5 +1,7 @@
 # Security Video Smart Lock
 
+![board-prototype](images\board_prototype.png "Prototype of System")
+
 ## Overview
 
 This project is a smart lock system that uses face recognition.
