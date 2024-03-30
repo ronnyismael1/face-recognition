@@ -6,72 +6,70 @@ import cv2
 import sys
 import os
 import face_recognition
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
-
-# Import your face recognition module
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'biometric_recognition'))
-from biometric_recognition.recognize_faces import recognize_faces
 from utilities.lock_module import unlock_door
 
-# Initialize camera
+# Get the directory containing this file
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Construct the path to the biometric_recognition directory
+biometric_recognition_dir = os.path.join(current_dir, '..', 'biometric_recognition')
+# Add the biometric_recognition directory to the Python path
+sys.path.append(biometric_recognition_dir)
+
+from biometric_recognition.recognize_faces import recognize_faces
+
+# Initialize the camera (use 0 for the laptop's built-in camera)
 cap = cv2.VideoCapture(0)
 
-def process_frame(frame, executor):
-    # Resize frame for faster processing
-    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-    
-    # Submit the frame for processing
-    future = executor.submit(recognize_faces, small_frame)
-    return future
+process_this_frame = True
+last_names_scaled = []  # Store the last known faces and locations
 
-def main():
-    with ThreadPoolExecutor(max_workers=1) as executor:
-        frame_futures = []
-        last_names_scaled = []
-        
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                print("\nError: Could not read frame from camera. Please check your camera connection and try again.\n")
-                break
-            
-            # Submit the current frame for processing
-            future = process_frame(frame, executor)
-            frame_futures.append((future, frame))
-            
-            # Check for any completed futures
-            for future, original_frame in frame_futures:
-                if future.done():
-                    names = future.result()
-                    last_names_scaled = [(name, (top * 4, right * 4, bottom * 4, left * 4)) for name, (top, right, bottom, left) in names]
-                    frame_futures.remove((future, original_frame))
-                # Check if a known face is detected and unlock the door
-                for name, _ in last_names_scaled:
-                    if name != "Unknown":
-                        print(f"Detected: {name}")
-                        unlock_door()
-                        break  # If at least one known face is detected, unlock the door
-                    
-            # Draw boxes and names on the original frame
-            for name, (top, right, bottom, left) in last_names_scaled:
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-                cv2.putText(frame, name, (left + 6, top - 6), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 1)
-            
-            cv2.imshow('Video', frame)
-            
-            if cv2.waitKey(1) & 0xFF == ord('q') < 1:
-                break
-        
-        # Wait for all tasks to complete before exiting
-        futures_only = [future for future, _ in frame_futures]
-        for future in as_completed(futures_only):
-            # You could process results here if needed
-            pass        
-        
-    cap.release()
-    cv2.destroyAllWindows()
+while True:
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+
+    # Check if frame was successfully read
+    if not ret:
+        print("\nError: Could not read frame from camera. Please check your camera connection and try again.\n")
+        break
+
+    # Resize frame of video for faster face recognition processing
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+
+    if process_this_frame:
+        # Recognize faces in the resized frame
+        names = recognize_faces(small_frame)
+
+        # Scale back up face locations to the original frame size and store them
+        last_names_scaled = [
+            (name, (top * 4, right * 4, bottom * 4, left * 4))
+            for name, (top, right, bottom, left) in names
+        ]
     
+        # Check if a known face is detected and unlock the door
+        for name, _ in last_names_scaled:
+            if name != "Unknown":
+                print(f"Detected: {name}")
+                unlock_door()
+                break  # If at least one known face is detected, unlock the door
+
+    # Draw a box and name for each recognized face in the original frame using the last known data
+    for name, (top, right, bottom, left) in last_names_scaled:
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+        cv2.putText(frame, name, (left + 6, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+
+    process_this_frame = not process_this_frame
+
+    # Display the resulting frame
+    cv2.imshow('Video', frame)
+
+    # Quit the program when 'q' is pressed or the window is closed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# When everything is done, release the capture and close the windows
+cap.release()
+cv2.destroyAllWindows()
+
 def start():
     main()
 if __name__ == "__main__":
