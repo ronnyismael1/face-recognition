@@ -1,3 +1,7 @@
+# This code is responsible for capturing frames from the camera, detecting the user's face, 
+# and drawing a box around it. It will provide the input (video frames) that the face
+# recognition algorithm will use to recognize the user's face.
+
 import cv2
 import sys
 import os
