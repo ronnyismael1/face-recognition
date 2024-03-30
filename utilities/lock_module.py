@@ -26,13 +26,12 @@ def unlock_door():
 
     print("Unlocking...")
     GPIO.output(18, GPIO.LOW)  # LOW signal unlocks the door
-    last_unlock_time = current_time
+    sleep(10)  # TO-DO: NEED TO REMOVE SLEEP IT MESSES WITH THE CAMERA
+    print("Unlocking complete.\n")
+    lock_door()  # Re-lock the door automatically after 5 seconds
+    last_unlock_time = time.time()
 
 def lock_door():
-    global last_unlock_time
-    current_time = time.time()
-
-    if current_time - last_unlock_time >= 10:  # 10 seconds have passed
-        print("Locking...")
-        GPIO.output(18, GPIO.HIGH)  # HIGH signal locks the door
-        print("Locking complete.\n")
+    print("Locking...")
+    GPIO.output(18, GPIO.HIGH)  # HIGH signal locks the door
+    print("Locking complete.\n")
