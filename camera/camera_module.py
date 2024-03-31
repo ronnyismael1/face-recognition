@@ -8,7 +8,7 @@ import os
 import face_recognition
 from utilities.lock_module import unlock_door
 
-def start():
+def main():
     # Get the directory containing this file
     current_dir = os.path.dirname(os.path.abspath(__file__))
     # Construct the path to the biometric_recognition directory
@@ -70,3 +70,9 @@ def start():
     # When everything is done, release the capture and close the windows
     cap.release()
     cv2.destroyAllWindows()
+
+def start():
+    main()
+    
+if __name__ == "__main__":
+    start()
