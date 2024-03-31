@@ -1,5 +1,7 @@
 # Security Video Smart Lock
 
+![board-prototype](images/board_prototype.png "Prototype of System")
+
 ## Overview
 
 This project is a smart lock system that uses face recognition.
@@ -14,6 +16,44 @@ The ```recognize_faces.py``` script is structured to train a face recognition al
 The ```camera_module.py``` script is responsible for capturing frames from the camera, processing them to detect and identify faces using the recognize_faces function imported from recognize_faces.py, and then displaying the video feed with boxes and names drawn around recognized faces. The script uses OpenCV for video capture and processing, including resizing frames for faster processing and toggling between processing frames to improve performance.
 
 The ```lock_module.py``` script enables a Raspberry Pi to control a door lock using GPIO pins and threading for asynchronous operation. It initializes the lock mechanism and manages locking/unlocking actions based on person detection. The unlock_door function unlocks the door if a specified person is detected, with a cooldown period to prevent frequent unlocking. A threading.Timer is used to re-lock the door automatically after a short period. This setup allows for a background thread to handle the lock's state while the main program runs in parallel.
+
+## File Structure
+
+FACIAL_LOCK_PROJECT
+│   main.py                 # Main application entry point
+│   README.md               # Project documentation
+│   LICENSE                 # License file
+│   about_branch.txt        # Branch information or other notes
+│
+├───biometric_recognition   # Existing Python biometric recognition code
+│   │   recognize_faces.py  # Python code for recognizing faces
+│   │
+│   └───train               # Training algorithm to recognize individuals
+│
+├───camera                  # Handling camera input
+│   │   camera_module.py    # Capturing frames to feed to the training algorithm
+│
+├───face_recognition        #
+│
+├───test                    # Test scripts for Python modules
+│   │   camera_test.py      # Test script for the camera module
+│
+├───utilities               # Utility functions
+│   │   lock_module.py      # Functions for controlling the lock
+│   │   q_utilities.py      # Other utility functions
+│
+└───fpga                    # FPGA directory
+    │   compile.tcl         # Script to compile and synthesize Verilog for FPGA
+    │   constraints.xdc     # Pin and timing constraints for FPGA
+    │
+    ├───src                 # Verilog source files
+    │   │   top_module.v    # Top-level Verilog module for FPGA
+    │   │   spi_interface.v # SPI interface for communication with Pi
+    │   │   ...
+    │
+    └───test                # Testbenches for Verilog modules
+        │   top_module_tb.v # Testbench for top-level module
+        │   ...
 
 ## Dependancies
 
