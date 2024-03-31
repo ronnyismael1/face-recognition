@@ -1,8 +1,8 @@
 # GPIO controls for rasberry pi
 
 import RPi.GPIO as GPIO
-from time import sleep
 import time
+from threading import Timer
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -13,7 +13,7 @@ last_unlock_time = 0
 def initialize_lock():
     print("Initializing lock...")
     GPIO.output(18, GPIO.HIGH) # Initiate unlock
-    sleep(1)
+    time.sleep(1)
     print("Initialization complete.\n")
 
 def unlock_door():
@@ -27,8 +27,7 @@ def unlock_door():
     print("Unlocking...")
     GPIO.output(18, GPIO.LOW)  # LOW signal unlocks the door
     sleep(10)  # TO-DO: NEED TO REMOVE SLEEP IT MESSES WITH THE CAMERA
-    print("Unlocking complete.\n")
-    lock_door()  # Re-lock the door automatically after 5 seconds
+    Timer(10, lock_door).start()
     last_unlock_time = time.time()
 
 def lock_door():
