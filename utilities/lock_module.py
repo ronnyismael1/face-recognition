@@ -1,4 +1,5 @@
-# GPIO controls for rasberry pi
+# GPIO controls for rasberry pi. Module uses threading to run function in background, so we 
+# can have a thread to handle the delayed re-lock and run the main program in parallel.
 
 import RPi.GPIO as GPIO
 import time
@@ -21,9 +22,10 @@ def unlock_door():
     current_time = time.time()
 
     if current_time - last_unlock_time < 20:
-        print(f"Too many requests: {int(20 - (current_time - last_unlock_time))}s remaining.")
+        # print(f"Too many requests: {int(20 - (current_time - last_unlock_time))}s remaining.")
         return
 
+    print(f"Detected: {detected_name}")
     print("Unlocking...")
     GPIO.output(18, GPIO.LOW)  # LOW signal unlocks the door
     Timer(10, lock_door).start()
