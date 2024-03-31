@@ -7,11 +7,13 @@ It is best used in a Linux environment, but it can also work in other environmen
 
 ## How it works
 
+The ```main.py``` script serves as the entry point to initiate the program.
+
 The ```recognize_faces.py``` script is structured to train a face recognition algorithm to recognize specific individuals by loading sample images, extracting face encodings, and then comparing these encodings against faces found in other images to identify them. The script defines a function recognize_faces(image) that takes an image as input, detects faces within it, and attempts to recognize these faces based on the known face encodings. This process involves loading and encoding sample images for known individuals (in this case, "Ronny" and "Obama") and then using these encodings to identify matches in the input image.
 
 The ```camera_module.py``` script is responsible for capturing frames from the camera, processing them to detect and identify faces using the recognize_faces function imported from recognize_faces.py, and then displaying the video feed with boxes and names drawn around recognized faces. The script uses OpenCV for video capture and processing, including resizing frames for faster processing and toggling between processing frames to improve performance.
 
-The ```main.py``` script is structured to import the camera module and then run a function from it (start()) to initiate the process of capturing video frames and recognizing faces.
+The ```lock_module.py``` script enables a Raspberry Pi to control a door lock using GPIO pins and threading for asynchronous operation. It initializes the lock mechanism and manages locking/unlocking actions based on person detection. The unlock_door function unlocks the door if a specified person is detected, with a cooldown period to prevent frequent unlocking. A threading.Timer is used to re-lock the door automatically after a short period. This setup allows for a background thread to handle the lock's state while the main program runs in parallel.
 
 ## Dependancies
 
