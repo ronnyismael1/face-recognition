@@ -1,6 +1,31 @@
 Trying to improve camera speed.
 Will be using ARTY S7 FPGA as an accelorator.
 
+FACIAL_LOCK_PROJECT
+│
+└───fpga                     # FPGA-related files
+    │   compile.tcl          # Compilation and synthesis scripts
+    │   constraints.xdc      # Constraints file for pin assignments and timing
+    │
+    ├───src                  # Source directory for Verilog files
+    │   │   top_module.v     # Top-level module that integrates all components
+    │   │
+    │   ├───ip_cores         # Custom IP cores for specific functionalities
+    │   │   │   image_preprocessor.v  # IP core for image preprocessing
+    │   │   │   feature_detector.v    # IP core for feature detection
+    │   │   │   ...                   # Other IP cores
+    │   │
+    │   └───interfaces       # Communication interface modules
+    │       │   spi_interface.v       # SPI interface module
+    │       │   ...                   # Other interfaces if necessary
+    │
+    └───test                 # Testbenches for Verilog modules
+        │   top_module_tb.v  # Testbench for top-level module
+        │   image_preprocessor_tb.v  # Testbench for the image preprocessor
+        │   feature_detector_tb.v    # Testbench for feature detector
+        │   spi_interface_tb.v       # Testbench for SPI interface
+        │   ...
+
 
 FACIAL_LOCK_PROJECT
 │   main.py                 # Main application entry point
@@ -37,4 +62,3 @@ FACIAL_LOCK_PROJECT
     └───test                # Testbenches for Verilog modules
         │   top_module_tb.v # Testbench for top-level module
         │   ...
-        
