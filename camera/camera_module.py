@@ -50,7 +50,7 @@ def main():
             for name, _ in last_names_scaled:
                 if name != "Unknown":
                     # print(f"Detected: {name}") # Moved to lock_module
-                    unlock_door()
+                    unlock_door(name)
                     break  # If at least one known face is detected, unlock the door
 
         # Draw a box and name for each recognized face in the original frame using the last known data

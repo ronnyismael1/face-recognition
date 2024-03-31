@@ -17,7 +17,7 @@ def initialize_lock():
     time.sleep(1)
     print("Initialization complete.\n")
 
-def unlock_door():
+def unlock_door(detected_name):
     global last_unlock_time
     current_time = time.time()
 
