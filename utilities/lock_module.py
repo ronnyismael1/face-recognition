@@ -26,7 +26,6 @@ def unlock_door():
 
     print("Unlocking...")
     GPIO.output(18, GPIO.LOW)  # LOW signal unlocks the door
-    sleep(10)  # TO-DO: NEED TO REMOVE SLEEP IT MESSES WITH THE CAMERA
     Timer(10, lock_door).start()
     last_unlock_time = time.time()
 
