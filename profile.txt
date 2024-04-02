@@ -1,0 +1,2 @@
+python profile_main.py // to collect data
+snakeviz main_profile.prof // to visualize it
