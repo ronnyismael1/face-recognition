@@ -67,6 +67,11 @@ For lock GPIO
 sudo apt-get install python3-rpi.gpio
 ```
 
+SPI Protocol on Raspi
+```sh
+pip install spidev
+```
+
 ## Usage
 
 After installing the necessary packages, you can start using the project.
