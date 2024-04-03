@@ -6,7 +6,7 @@ import cv2
 import sys
 import os
 import face_recognition
-#from utilities.lock_module import unlock_door
+from utilities.lock_module import unlock_door
 
 def main():
     # Get the directory containing this file
@@ -49,8 +49,8 @@ def main():
             # Check if a known face is detected and unlock the door
             for name, _ in last_names_scaled:
                 if name != "Unknown":
-                    # print(f"Detected: {name}") # Moved to lock_module
-                    #unlock_door(name)
+                    #print(f"Detected: {name}") # Moved to lock_module
+                    unlock_door(name)
                     break  # If at least one known face is detected, unlock the door
 
         # Draw a box and name for each recognized face in the original frame using the last known data
