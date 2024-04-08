@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/rismael/Documents/SJSU/Senior Project/Facial Recognition/fpga/src/spi_slave.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module spi_slave
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/rismael/Documents/SJSU/Senior Project/Facial Recognition/fpga/src/top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top

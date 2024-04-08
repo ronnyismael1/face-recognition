@@ -45,6 +45,9 @@ def recognize_faces(image):
 
     # Loop through each face found in the image
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+        size_of_response = 1  # Assuming a single byte response
+        special_value_for_no_match = 255  # Assuming 255 indicates no match
+        
         # Serialize the face encoding to bytes
         face_encoding_bytes = serialize_face_encodings([face_encoding])
         

@@ -27,6 +27,18 @@ Some packages needed for the project to run:
 * Pillow
 * scipy>=0.17.0
 
+face_recognition_models: Contains the pre-trained models used for detecting and recognizing faces.
+
+Click>=6.0: A package for creating command-line interfaces in a composable way, used for handling the program's input parameters or configuring settings through the command line.
+
+dlib>=19.3.0: A toolkit for machine learning and image processing, used for its efficient face detection and recognition algorithms which are crucial for identifying faces within images.
+
+numpy: A fundamental package for scientific computing with Python, used for handling and manipulating the array data structures that represent images and video frames.
+
+Pillow: The Python Imaging Library adds image processing capabilities to your Python interpreter, used for opening, manipulating, and saving many different image file formats within the program.
+
+scipy>=0.17.0: A library used for scientific and technical computing, used for tasks like image manipulation, facial feature extraction, or even to support the machine learning algorithms with functions for optimization and linear algebra.
+
 ## Installation
 
 *Note: For linux/MacOS be sure to use pip3/python3*
@@ -43,11 +55,23 @@ This project uses an open-source facial recognition library. You can clone the r
 git clone https://github.com/ageitgey/face_recognition.git
 ```
 
+Some Pre-reqs to install if you don't have it (needed for dlib)
+```sh
+sudo apt-get update
+sudo apt-get install cmake
+sudo apt-get install build-essential libopenblas-dev liblapack-dev 
+```
+
 Navigate to the cloned repository and install the necessary packages:
 
 ```sh
 cd face_recognition
 pip install -r requirements.txt
+```
+
+On raspi you might need to bypass security measures on pip installs
+```sh
+pip3 install --break-system-packages -r requirements.txt
 ```
 
 After that, install the face recognition library:
