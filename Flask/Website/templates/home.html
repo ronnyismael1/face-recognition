@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Hello, {{ user.first_name }}</h1>
+    {% if user.profile_picture %}
+    <img src="{{ url_for('views.profile_picture', id=user.id) }}" alt="Profile Picture" style="width: 200px; height: auto;">
+    {% endif %}
+    <br><br>
+    <form action="{{ url_for('views.unlock') }}" method="post">
+        <button type="submit" class="btn btn-primary">Unlock</button>
+    </form>
+</div>
+{% endblock %}
