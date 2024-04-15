@@ -6,7 +6,14 @@ import cv2
 import sys
 import os
 import face_recognition
-from utilities.lock_module import unlock_door
+import requests
+#from utilities.lock_module import unlock_door
+
+def notify_flask(user_name):
+    url = 'http://localhost:5000/face-detected'  # Adjust the URL based on your Flask app's URL
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(url, json={'name': user_name}, headers=headers)
+    print(response.text)
 
 def main():
     # Get the directory containing this file
@@ -50,7 +57,9 @@ def main():
             for name, _ in last_names_scaled:
                 if name != "Unknown":
                     print(f"Detected: {name}") # Moved to lock_module
-                    unlock_door(name)
+                    #unlock_door(name)
+                    notify_flask(name)
+
                     break  # If at least one known face is detected, unlock the door
 
         # Draw a box and name for each recognized face in the original frame using the last known data
