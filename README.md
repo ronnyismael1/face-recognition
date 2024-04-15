@@ -21,6 +21,7 @@ The ```lock_module.py``` script enables a Raspberry Pi to control a door lock us
 
 Some packages needed for the project to run:
 * face_recognition_models
+* OpenCV
 * Click>=6.0
 * dlib>=19.3.0
 * numpy
