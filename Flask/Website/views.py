@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from flask import Blueprint, render_template, Response
 from flask_login import login_required, current_user
 from .models import User
-from utilities.lock_module import unlock_door
+#from utilities.lock_module import unlock_door
 
 views = Blueprint('views', __name__)
 
@@ -24,6 +24,6 @@ def profile_picture(id):
 @views.route('/unlock', methods=['POST'])
 @login_required
 def unlock():
-    unlock_door("Manual Override")  # Call the unlock function from lock_module
+    #unlock_door("Manual Override")  # Call the unlock function from lock_module
     flash('Unlock requested', 'info')  # Inform the user
     return redirect(url_for('views.home'))

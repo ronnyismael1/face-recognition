@@ -12,17 +12,20 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
         user = User.query.filter_by(email=email).first()
-        if user:
-            if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True)
-                return redirect(url_for('views.home'))
-            else:
-                flash('Incorrect password, try again.', category='error')
-        else:
+
+        if user and check_password_hash(user.password, password):
+            user.logged_in = True  # Set the user as logged in
+            print(f"Before commit: {user.logged_in}")  # Debugging statement
+            db.session.commit()  # Commit the change to the database
+            print(f"After commit: {user.logged_in}")  # Debugging statement
+            login_user(user, remember=True)
+            flash('Logged in successfully!', category='success')
+            return redirect(url_for('views.home'))
+        elif not user:
             flash('Email does not exist.', category='error')
+        else:
+            flash('Incorrect password, try again.', category='error')
 
     return render_template("login.html", user=current_user)
 
@@ -30,9 +33,8 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    user = current_user
-    user.is_recognized = False  # Set the flag to False on logout
-    db.session.commit()  # Commit the change to the database
+    current_user.logged_in = False
+    db.session.commit()
     logout_user()
     return redirect(url_for('auth.login'))
 

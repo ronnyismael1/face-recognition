@@ -12,3 +12,4 @@ class User(db.Model, UserMixin):
     profile_picture = db.Column(db.LargeBinary)
     profile_mimetype = db.Column(db.String(256))
     is_recognized = db.Column(db.Boolean, default=False)  # New field to track recognition status
+    logged_in = db.Column(db.Boolean, default=False)
