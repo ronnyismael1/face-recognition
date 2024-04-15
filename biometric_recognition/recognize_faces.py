@@ -24,24 +24,6 @@ def load_known_faces_and_names():
 
 known_faces, known_faces_names = load_known_faces_and_names()
 
-# Loading sample picture and learn how to recognize it
-#ronny_image = face_recognition.load_image_file("biometric_recognition/train/ronny/ronny.png")
-#ronny_face_encoding = face_recognition.face_encodings(ronny_image)[0]
-
-# Load a second sample picture and learn how to recognize it
-#obama_image = face_recognition.load_image_file("biometric_recognition/train/obama/obama.png")
-#obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-
-# Create array(s) of known face encodings and their names
-#known_faces = [
-    #ronny_face_encoding,
-    #obama_face_encoding,
-#]
-#known_faces_names = [
-    #"Ronny",
-    #"obama",
-#]
-
 def recognize_faces(image):
     # Find all the faces and face encodings in the image
     face_locations = face_recognition.face_locations(image)

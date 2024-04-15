@@ -12,7 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    app.config['UPLOAD_FOLDER'] = '/path/to/upload/folder'  # Set the upload folder path
+    app.config['UPLOAD_FOLDER'] = '/home/facelock/Documents/projects/face-recognition/Flask/uploads'  # Set the upload folder path
     db.init_app(app)
 
     # Check if the upload folder exists, if not, create it

@@ -49,7 +49,7 @@ def main():
             # Check if a known face is detected and unlock the door
             for name, _ in last_names_scaled:
                 if name != "Unknown":
-                    print(f"Detected: {name}") # Moved to lock_module
+                    #print(f"Detected: {name}") # Moved to lock_module
                     unlock_door(name)
                     break  # If at least one known face is detected, unlock the door
 
