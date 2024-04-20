@@ -1,46 +1,42 @@
-# This file is to train the face recognition algorithm to recognize the faces of the users.
 import face_recognition
-from Flask.Website.models import User  # adjust the import path as necessary
-from Flask.Website import db, create_app  # adjust the import path as necessary
+from Flask.Website.models import User  # Ensure this path matches the location of your User class
 from io import BytesIO
+import base64
 
-app = create_app()  # create an instance of the Flask application
-
+# This function now uses Firebase to fetch user data
 def load_known_faces_and_names():
-    with app.app_context():  # necessary to access the database outside of Flask context
-        users = User.query.all()
-        known_faces = []
-        known_names = []
-        for user in users:
-            if user.profile_picture and user.first_name:
-                user_image = face_recognition.load_image_file(
-                    BytesIO(user.profile_picture)
-                )
-                user_face_encoding = face_recognition.face_encodings(user_image)[0]
-                known_faces.append(user_face_encoding)
-                known_names.append(user.first_name)
-        return known_faces, known_names
+    users = User.get_all()  # Using the get_all method from your Firebase User model
+    known_faces = []
+    known_names = []
+    for user in users:
+        if user.profile_picture and user.first_name:
+            try:
+                # Decode the base64 string; handle the case where you might not have the header
+                profile_picture_data = user.profile_picture
+                if ',' in profile_picture_data:
+                    # Split the string on the comma to remove the data URL prefix if present
+                    _, base64_encoded_data = profile_picture_data.split(',', 1)
+                else:
+                    base64_encoded_data = profile_picture_data
+
+                # Convert the base64 encoded data into bytes
+                user_image_data = base64.b64decode(base64_encoded_data)
+                # Convert bytes data to a stream
+                user_image_stream = BytesIO(user_image_data)
+                user_image = face_recognition.load_image_file(user_image_stream)
+                
+                # Try to obtain face encodings; skip if no faces are found in the image
+                user_face_encodings = face_recognition.face_encodings(user_image)
+                if user_face_encodings:
+                    user_face_encoding = user_face_encodings[0]
+                    known_faces.append(user_face_encoding)
+                    known_names.append(user.first_name)
+            except Exception as e:
+                print(f"Failed to process image for user {user.first_name}: {e}")
+    return known_faces, known_names
 
 
 known_faces, known_faces_names = load_known_faces_and_names()
-
-# Loading sample picture and learn how to recognize it
-#ronny_image = face_recognition.load_image_file("biometric_recognition/train/ronny/ronny.png")
-#ronny_face_encoding = face_recognition.face_encodings(ronny_image)[0]
-
-# Load a second sample picture and learn how to recognize it
-#obama_image = face_recognition.load_image_file("biometric_recognition/train/obama/obama.png")
-#obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-
-# Create array(s) of known face encodings and their names
-#known_faces = [
-    #ronny_face_encoding,
-    #obama_face_encoding,
-#]
-#known_faces_names = [
-    #"Ronny",
-    #"obama",
-#]
 
 def recognize_faces(image):
     # Find all the faces and face encodings in the image
