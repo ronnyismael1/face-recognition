@@ -1,0 +1,12 @@
+[33m839a6b8[m[33m ([m[1;36mHEAD -> [m[1;32mfirebase[m[33m, [m[1;31morigin/firebase[m[33m, [m[1;32mspeed[m[33m)[m HEAD@{0}: reset: moving to HEAD^
+[33m0badd62[m HEAD@{1}: commit: added firebase
+[33m839a6b8[m[33m ([m[1;36mHEAD -> [m[1;32mfirebase[m[33m, [m[1;31morigin/firebase[m[33m, [m[1;32mspeed[m[33m)[m HEAD@{2}: checkout: moving from speed to firebase
+[33m839a6b8[m[33m ([m[1;36mHEAD -> [m[1;32mfirebase[m[33m, [m[1;31morigin/firebase[m[33m, [m[1;32mspeed[m[33m)[m HEAD@{3}: checkout: moving from website to speed
+[33m021816f[m[33m ([m[1;31morigin/website[m[33m, [m[1;32mwebsite[m[33m)[m HEAD@{4}: reset: moving to HEAD
+[33m021816f[m[33m ([m[1;31morigin/website[m[33m, [m[1;32mwebsite[m[33m)[m HEAD@{5}: commit: camera.module.py is the issue. Not getting camera to boot up
+[33m839a6b8[m[33m ([m[1;36mHEAD -> [m[1;32mfirebase[m[33m, [m[1;31morigin/firebase[m[33m, [m[1;32mspeed[m[33m)[m HEAD@{6}: checkout: moving from speed to website
+[33m839a6b8[m[33m ([m[1;36mHEAD -> [m[1;32mfirebase[m[33m, [m[1;31morigin/firebase[m[33m, [m[1;32mspeed[m[33m)[m HEAD@{7}: commit: Made Website for our project
+[33m45ea36e[m[33m ([m[1;31morigin/speed[m[33m)[m HEAD@{8}: checkout: moving from main to speed
+[33mbdf6cb1[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{9}: checkout: moving from speed to main
+[33m45ea36e[m[33m ([m[1;31morigin/speed[m[33m)[m HEAD@{10}: checkout: moving from main to speed
+[33mbdf6cb1[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{11}: clone: from https://github.com/ronnyismael1/face-recognition

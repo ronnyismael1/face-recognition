@@ -4,12 +4,7 @@ import base64
 from flask_login import UserMixin
 
 # Path to your Firebase Admin SDK service account key file
-cred = credentials.Certificate('Flask/Website/static/yummy.json')
-
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://facelock-b410f-default-rtdb.firebaseio.com/'
-})
-
+##add cred and firebase initialization here
 class User(UserMixin):
     def __init__(self, id, email, password, first_name, profile_picture=None, profile_mimetype=None, is_recognized=False):
         self.id = id
