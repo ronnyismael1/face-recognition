@@ -3,36 +3,30 @@ from Flask.Website.models import User  # Ensure this path matches the location o
 from io import BytesIO
 import base64
 
-# This function now uses Firebase to fetch user data
+ # Using the get_all method from your Firebase User model
+
 def load_known_faces_and_names():
-    users = User.get_all()  # Using the get_all method from your Firebase User model
+    users = User.get_all()
     known_faces = []
     known_names = []
     for user in users:
         if user.profile_picture and user.first_name:
             try:
-                # Decode the base64 string; handle the case where you might not have the header
-                profile_picture_data = user.profile_picture
-                if ',' in profile_picture_data:
-                    # Split the string on the comma to remove the data URL prefix if present
-                    _, base64_encoded_data = profile_picture_data.split(',', 1)
-                else:
-                    base64_encoded_data = profile_picture_data
 
-                # Convert the base64 encoded data into bytes
+                if ',' in user.profile_picture:
+                    _, base64_encoded_data = user.profile_picture.split(',', 1)
+                else:
+                    base64_encoded_data = user.profile_picture
                 user_image_data = base64.b64decode(base64_encoded_data)
-                # Convert bytes data to a stream
                 user_image_stream = BytesIO(user_image_data)
                 user_image = face_recognition.load_image_file(user_image_stream)
-                
-                # Try to obtain face encodings; skip if no faces are found in the image
                 user_face_encodings = face_recognition.face_encodings(user_image)
                 if user_face_encodings:
-                    user_face_encoding = user_face_encodings[0]
-                    known_faces.append(user_face_encoding)
+                    known_faces.append(user_face_encodings[0])
                     known_names.append(user.first_name)
             except Exception as e:
-                print(f"Failed to process image for user {user.first_name}: {e}")
+                print(f"Error processing image for user {user.first_name}: {e}")
+                continue  # Add continue to skip failed processing
     return known_faces, known_names
 
 

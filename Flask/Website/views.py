@@ -31,10 +31,7 @@ def profile_picture(id):
         # Log error e or print to console
         print("Error splitting base64 string:", e)
         return 'Error processing the image data', 500
-    except TypeError as e:
-        # Log error e or print to console
-        print("Error decoding base64 string:", e)
-        return 'Error processing the image data', 500
+
 
 
 @views.route('/unlock', methods=['POST'])
