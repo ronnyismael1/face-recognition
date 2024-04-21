@@ -5,6 +5,10 @@ from flask_login import UserMixin
 
 # Path to your Firebase Admin SDK service account key file
 #add cred and firebase initialization here
+cred = credentials.Certificate('Flask/Website/static/yummy.json')
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://facelock-b410f-default-rtdb.firebaseio.com/'
+})
 class User(UserMixin):
     def __init__(self, id, email, password, first_name, profile_picture=None, profile_mimetype=None, is_recognized=False):
         self.id = id
@@ -38,13 +42,22 @@ class User(UserMixin):
         return None
 
     def save(self):
-        """Save the user object to Firebase"""
-        encoded_picture = None
-        if self.profile_picture:
-            mime = self.profile_mimetype.split('/')[1]  # Assumes format "image/jpeg"
-            header = f"data:image/{mime};base64,"
-            encoded_picture = header + base64.b64encode(self.profile_picture).decode('utf-8')
+        # If the profile picture is already a base64 string, prepare it with the header only if needed
+        if self.profile_picture and isinstance(self.profile_picture, str):
+            # Check if the header is already present in the string
+            if self.profile_picture.startswith("data:"):
+                # The header is already present, no need to add it
+                encoded_picture = self.profile_picture
+            else:
+                # The header is not present, add it
+                mime = self.profile_mimetype.split('/')[1] if self.profile_mimetype else 'jpeg' # default to 'jpeg' if mimetype not present
+                header = f"data:image/{mime};base64,"
+                encoded_picture = header + self.profile_picture
+        else:
+            # If there is no profile picture or it's not a string, set it to None
+            encoded_picture = None
 
+        # The rest of your data dictionary looks fine
         data = {
             "email": self.email,
             "password": self.password,
@@ -53,6 +66,8 @@ class User(UserMixin):
             "is_recognized": self.is_recognized,
             "profile_picture": encoded_picture
         }
+
+        # Update or create the user record in Firebase as you have it
         ref = db.reference(f'/users/{self.id}' if self.id else '/users')
         if self.id:
             ref.update(data)
@@ -60,6 +75,8 @@ class User(UserMixin):
             new_ref = ref.push(data)
             self.id = new_ref.key
         return self
+
+
 
     @staticmethod
     def find_by_email(email):

@@ -1,8 +1,7 @@
 import threading
 from Flask.Website import create_app  # Importing create_app function
-import camera.camera_module as camera  # Importing camera module
-
-# Creating Flask app instance using factory function
+import camera.camera_module as camera  # Importing 
+#Creating Flask app instance using factory function
 app = create_app()
 
 def run_camera():
