@@ -4,7 +4,32 @@ from io import BytesIO
 import base64
 
  # Using the get_all method from your Firebase User model
+def load_known_faces_and_names():
+    global known_faces, known_names
+    known_faces.clear()
+    known_names.clear()
+    users = User.get_all()
+    for user in users:
+        if user.profile_picture and user.first_name:
+            try:
+                base64_encoded_data = user.profile_picture.split(',')[1]
+                user_image_data = base64.b64decode(base64_encoded_data)
+                user_image_stream = BytesIO(user_image_data)
+                user_image = face_recognition.load_image_file(user_image_stream)
+                user_face_encodings = face_recognition.face_encodings(user_image)
+                if user_face_encodings:
+                    known_faces.append(user_face_encodings[0])
+                    known_names.append(user.first_name)
+                except Exception as e:
+                    print(f"Error processing image for user {user.first_name}: {e}")
 
+def user_changed(event):
+    load_known_faces_and_names()
+
+ref = db.reference('/users')
+ref.listen(user_changed)
+
+"""
 def load_known_faces_and_names():
     users = User.get_all()
     known_faces = []
@@ -31,6 +56,7 @@ def load_known_faces_and_names():
 
 
 known_faces, known_faces_names = load_known_faces_and_names()
+"""
 
 def recognize_faces(image):
     # Find all the faces and face encodings in the image

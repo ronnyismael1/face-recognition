@@ -1,27 +1,30 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-import os
-
-db = SQLAlchemy()
-DB_NAME = "database.db"
+import firebase_admin
+from firebase_admin import credentials, db as firebase_db, initialize_app
+def initialize_firebase():
+    # Path to your Firebase Admin SDK service account key file
+    #add cred and firebase initialization here
+    cred = credentials.Certificate('Flask/Website/static/yummy.json')
+    firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://facelock-b410f-default-rtdb.firebaseio.com/'
+    })
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    app.config['UPLOAD_FOLDER'] = '/path/to/upload/folder'
-    db.init_app(app)
+    initialize_firebase()
+    listen_for_user_updates()
+    return app
 
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
+def listen_for_user_updates():
+    ref = firebase_db.reference('/users')
+    
+    def user_changed(event):
+        print('Data changed:', event.data)
+    
+    ref.listen(user_changed)
 
-    from .views import views
-    from .auth import auth
-    app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
 
-    login_manager = LoginManager()
+    """login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
@@ -31,4 +34,4 @@ def create_app():
     def load_user(user_id):
         return User.get(user_id)  # Use the Firebase admin SDK to load user
 
-    return app
+    return app"""
