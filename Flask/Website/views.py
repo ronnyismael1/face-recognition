@@ -18,7 +18,7 @@ def profile_picture(id):
     if not user or not user.profile_picture:
         return 'No profile picture found', 404
     try:
-        # Assuming user.profile_picture is the base64 string of the image
+        # Assuming user. profile_picture is the base64 string of the image
         # Check if the profile_picture contains a base64 header
         if ',' in user.profile_picture:
             base64_data = user.profile_picture.split(',')[1]
@@ -37,8 +37,11 @@ def profile_picture(id):
 @views.route('/unlock', methods=['POST'])
 @login_required
 def unlock():
-    unlock_door("Manual Override")  # Assume unlock_door is a function defined in utilities.lock_module
-    flash('Unlock requested', 'info')
+    if current_user.is_authenticated and current_user.is_recognized:
+        unlock_door("Automatic Recognition")  # Assuming unlock_door is defined elsewhere
+        flash('Door unlocked!', 'success')
+    else:
+        flash('Unauthorized access attempt.', 'error')
     return redirect(url_for('views.home'))
 
 

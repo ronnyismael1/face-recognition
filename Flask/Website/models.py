@@ -90,3 +90,8 @@ class User(UserMixin):
         return None
 
 
+    def update_recognition_status(self, is_recognized):
+        self.is_recognized = is_recognized
+        ref = db.reference(f'/users/{self.id}')
+        ref.update({"is_recognized": self.is_recognized})
+
