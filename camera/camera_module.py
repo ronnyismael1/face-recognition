@@ -7,7 +7,7 @@ import sys
 import os
 from Flask.Website.models import User
 import face_recognition
-#from utilities.lock_module import unlock_door
+from utilities.lock_module import unlock_door
 
 def main():
     # Get the directory containing this file
@@ -50,11 +50,11 @@ def main():
             # Check if a known face is detected and unlock the door
             for name, _ in last_names_scaled:
                 if name != "Unknown":
-                    user = User.find_by_email(name)  # Assuming you have or will implement this method
-                    if user:
-                        user.update_recognition_status(True)
-                    print(f"Detected: {name}")
-                    break  # If at least one known face is detected, unlock the door
+                    recognized_user = User.query.filter_by(first_name=name, logged_in=True).first()
+                    if recognized_user:
+                        print(f"Detected and logged in: {name}")
+                        unlock_door()  # Implement this function accordingly
+                        break
 
         # Draw a box and name for each recognized face in the original frame using the last known data
         for name, (top, right, bottom, left) in last_names_scaled:

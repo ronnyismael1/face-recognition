@@ -42,21 +42,38 @@ def refresh_known_faces():
 
 def recognize_faces(image):
     current_time = time.time()
+    # Refresh face data if necessary
     if current_time - last_update_time > cache_update_interval:
         refresh_known_faces()
 
     face_locations = face_recognition.face_locations(image)
     face_encodings = face_recognition.face_encodings(image, face_locations)
     names = []
-    
+    recognized_users_this_frame = []
+
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
         matches = face_recognition.compare_faces(known_faces, face_encoding)
         name = "Unknown"
-        
+
         if True in matches:
             first_match_index = matches.index(True)
             name = known_names[first_match_index]
-        
+            recognized_user = User.get_by_name(name)
+            if recognized_user:
+                if not recognized_user.is_recognized:
+                    recognized_user.update_recognition_status(True)
+                    recognized_user.save()
+                recognized_users_this_frame.append(recognized_user.id)
+
         names.append((name, (top, right, bottom, left)))
+
+    # Reset recognition status for users not recognized in this frame
+    reset_unrecognized_users(recognized_users_this_frame)
     return names
 
+def reset_unrecognized_users(recognized_users_this_frame):
+    all_users = User.get_all()
+    for user in all_users:
+        if user.id not in recognized_users_this_frame and user.is_recognized:
+            user.update_recognition_status(False)
+            user.save()

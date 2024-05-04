@@ -12,7 +12,7 @@ firebase_admin.initialize_app(cred, {
 })
 
 class User(UserMixin):
-    def __init__(self, id, email, password, first_name, profile_picture=None, profile_mimetype=None, is_recognized=False):
+    def __init__(self, id, email, password, first_name, profile_picture=None, profile_mimetype=None, is_recognized=False, logged_in=False):
         self.id = id
         self.email = email
         self.password = password
@@ -20,6 +20,7 @@ class User(UserMixin):
         self.profile_picture = profile_picture
         self.profile_mimetype = profile_mimetype
         self.is_recognized = is_recognized
+        self.logged_in = logged_in
 
     @staticmethod
     def get_all():
@@ -94,4 +95,15 @@ class User(UserMixin):
         self.is_recognized = is_recognized
         ref = db.reference(f'/users/{self.id}')
         ref.update({"is_recognized": self.is_recognized})
+
+@staticmethod
+def get_by_name(name):
+    """Find a user by first name using Firebase"""
+    ref = db.reference('/users')
+    all_users = ref.get()
+    if all_users:
+        for user_id, user in all_users.items():
+            if user['first_name'] == name:
+                return User(id=user_id, **user)
+    return None
 

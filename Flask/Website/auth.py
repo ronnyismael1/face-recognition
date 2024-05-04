@@ -12,13 +12,13 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
         user = User.find_by_email(email)
         if user:
-            # Since passwords are hashed, checking must be done as before
             if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
+                user.logged_in = True  # Set logged_in to True here
+                user.save()
                 login_user(user, remember=True)
+                flash('Logged in successfully!', category='success')
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -29,10 +29,10 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    user = current_user
-    user.is_recognized = False
-    user.save()  # Save the change directly to Firebase
+    current_user.logged_in = False  # Set logged_in to False here
+    current_user.save()
     logout_user()
+    flash('You have been logged out.', category='success')
     return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
