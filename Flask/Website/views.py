@@ -35,13 +35,10 @@ def profile_picture(id):
 
 
 @views.route('/unlock', methods=['POST'])
-@login_required
+@login_required  # This decorator requires a user to be logged in to access this route.
 def unlock():
-    if current_user.is_authenticated and current_user.is_recognized:
-        unlock_door("Automatic Recognition")  # Assuming unlock_door is defined elsewhere
-        flash('Door unlocked!', 'success')
-    else:
-        flash('Unauthorized access attempt.', 'error')
-    return redirect(url_for('views.home'))
+    unlock_door("Automatic Recognition")  # Assuming unlock_door is defined elsewhere
+    flash('Door unlocked!', 'success')
+    return redirect(url_for('views.home'))  
 
 
