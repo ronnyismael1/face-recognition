@@ -58,7 +58,7 @@ def recognize_faces(image):
         if True in matches:
             first_match_index = matches.index(True)
             name = known_names[first_match_index]
-            recognized_user = User.get_by_name(name)
+            recognized_user = User.find_by_name_and_logged_in_status(name)
             if recognized_user:
                 if not recognized_user.is_recognized:
                     recognized_user.update_recognition_status(True)

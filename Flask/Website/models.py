@@ -96,14 +96,14 @@ class User(UserMixin):
         ref = db.reference(f'/users/{self.id}')
         ref.update({"is_recognized": self.is_recognized})
 
-@staticmethod
-def get_by_name(name):
-    """Find a user by first name using Firebase"""
-    ref = db.reference('/users')
-    all_users = ref.get()
-    if all_users:
-        for user_id, user in all_users.items():
-            if user['first_name'] == name:
-                return User(id=user_id, **user)
-    return None
+    @staticmethod
+    def find_by_name_and_logged_in_status(name, logged_in=True):
+        """Find a user by first name and logged-in status using Firebase"""
+        ref = db.reference('/users')
+        all_users = ref.get()
+        if all_users:
+            for user_id, user in all_users.items():
+                if user.get('first_name') == name and user.get('logged_in') == logged_in:
+                    return User(id=user_id, **user)
+        return None
 
