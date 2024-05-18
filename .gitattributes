@@ -1,0 +1,11 @@
+# Mark all files as vendored by default
+* linguist-vendored
+
+# Python files included in language statistics
+*.py linguist-vendored=false
+
+# Verilog files included in language statistics
+*.v linguist-vendored=false
+*.sv linguist-vendored=false
+*.vh linguist-vendored=false
+*.svh linguist-vendored=false
